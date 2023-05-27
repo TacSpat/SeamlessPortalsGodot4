@@ -5,7 +5,7 @@ Near Seamless portals I made in about a week for the Godot 4 Engine. Not everyth
 
 WHAT THESE DO:
 
-walk through them with near seamless effect
+-walk through them with near seamless effect
 
 WHAT THESE DONT DO:
 
