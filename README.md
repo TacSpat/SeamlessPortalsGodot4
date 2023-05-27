@@ -10,6 +10,8 @@ walk through them with near seamless effect
 WHAT THESE DONT DO:
 
 -object clipping
+
 -taking objects with you(multiple objects)
+
 -recursive portals
 
