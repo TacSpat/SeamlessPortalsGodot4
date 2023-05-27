@@ -1,0 +1,85 @@
+[gd_scene load_steps=12 format=3 uid="uid://ds3d5e3l3eo6k"]
+
+[ext_resource type="PackedScene" uid="uid://dvl8jodxx7auy" path="res://player.tscn" id="2_ern5s"]
+[ext_resource type="PackedScene" uid="uid://5qjhwriyxkdk" path="res://portal.tscn" id="3_2t6k7"]
+[ext_resource type="PackedScene" uid="uid://bq5mo81n713kq" path="res://island.tscn" id="3_mr13u"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_yp2sr"]
+sky_top_color = Color(0.207843, 0.454902, 0.729412, 1)
+sky_horizon_color = Color(0.776471, 0.592157, 0.705882, 1)
+sky_curve = 0.0416088
+sky_cover_modulate = Color(0.219608, 0.184314, 0.415686, 1)
+ground_bottom_color = Color(0.247059, 0.545098, 0.917647, 1)
+ground_horizon_color = Color(0.188235, 0.721569, 0.870588, 1)
+
+[sub_resource type="Sky" id="Sky_2cnk8"]
+sky_material = SubResource("ProceduralSkyMaterial_yp2sr")
+
+[sub_resource type="Environment" id="Environment_0eddh"]
+background_mode = 2
+background_energy_multiplier = 0.84
+sky = SubResource("Sky_2cnk8")
+sky_custom_fov = 90.0
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l1grj"]
+albedo_color = Color(0.0705882, 0.94902, 0.32549, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5qfgr"]
+lightmap_size_hint = Vector2i(152, 152)
+material = SubResource("StandardMaterial3D_l1grj")
+size = Vector2(40, 40)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_owfej"]
+size = Vector3(40, 1, 40)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1vsii"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15hm5"]
+albedo_color = Color(1, 0.945098, 0.529412, 1)
+
+[node name="Environment" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+light_color = Color(0.882353, 0.580392, 0.211765, 1)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_0eddh")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_5qfgr")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+shape = SubResource("BoxShape3D_owfej")
+
+[node name="player" parent="." instance=ExtResource("2_ern5s")]
+transform = Transform3D(-0.94242, 0, -0.334431, 0, 1, 0, 0.334431, 0, -0.94242, 8.09554, 8.06083, -29.2594)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.39778, 0.798176, 12.4005)
+mesh = SubResource("BoxMesh_1vsii")
+
+[node name="Island" parent="." instance=ExtResource("3_mr13u")]
+transform = Transform3D(1.31134e-07, 0, -1, 0, 1, 0, 1, 0, 1.31134e-07, 10, 5, -29)
+metadata/_edit_group_ = true
+
+[node name="Floor" parent="Island" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_15hm5")
+
+[node name="Island2" parent="." instance=ExtResource("3_mr13u")]
+transform = Transform3D(3.0598e-07, 0, -1, 0, 1, 0, 1, 0, 3.0598e-07, 0, 13, 0)
+
+[node name="Portal" parent="." instance=ExtResource("3_2t6k7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, 5)
+portal_id = 1
+
+[node name="Portal2" parent="." instance=ExtResource("3_2t6k7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1, 5)
+portal_id = 1
+
+[editable path="Island"]

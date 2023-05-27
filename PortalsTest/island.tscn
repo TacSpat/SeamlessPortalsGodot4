@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://bq5mo81n713kq"]
+
+[ext_resource type="PackedScene" uid="uid://5qjhwriyxkdk" path="res://portal.tscn" id="1_lhgqc"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_v51ap"]
+size = Vector3(15, 0, 8)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_xgtdn"]
+size = Vector3(15, 0, 8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_85rpg"]
+resource_local_to_scene = true
+albedo_color = Color(0.321569, 0.321569, 0.321569, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lw81n"]
+material = SubResource("StandardMaterial3D_85rpg")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3lcit"]
+
+[node name="Island" type="Node3D"]
+
+[node name="Floor" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_v51ap")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
+shape = SubResource("BoxShape3D_xgtdn")
+
+[node name="Portal" parent="." instance=ExtResource("1_lhgqc")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 1, 0)
+
+[node name="Rock" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 5, 0, 0)
+mesh = SubResource("BoxMesh_lw81n")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rock"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rock/StaticBody3D"]
+shape = SubResource("BoxShape3D_3lcit")
+
+[node name="Rock2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.649422, 0.380214, -0.658551, 0, 0.866025, 0.5, 0.760429, -0.324711, 0.562416, 5, 0, -1)
+mesh = SubResource("BoxMesh_lw81n")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rock2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rock2/StaticBody3D"]
+shape = SubResource("BoxShape3D_3lcit")
+
+[node name="Rock3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, -4.0992, 0, 1.09407)
+mesh = SubResource("BoxMesh_lw81n")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rock3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rock3/StaticBody3D"]
+shape = SubResource("BoxShape3D_3lcit")
+
+[node name="Rock4" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.649422, 0.380214, -0.658551, 0, 0.866025, 0.5, 0.760429, -0.324711, 0.562416, -4.0992, 0, 0.0940731)
+mesh = SubResource("BoxMesh_lw81n")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Rock4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Rock4/StaticBody3D"]
+shape = SubResource("BoxShape3D_3lcit")

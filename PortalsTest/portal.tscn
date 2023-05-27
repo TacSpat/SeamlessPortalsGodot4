@@ -1,0 +1,150 @@
+[gd_scene load_steps=10 format=3 uid="uid://5qjhwriyxkdk"]
+
+[ext_resource type="Script" path="res://Portal.gd" id="1_o53rk"]
+
+[sub_resource type="Shader" id="Shader_b217r"]
+code = "// NOTE: Shader automatically converted from Godot Engine 4.0.2.stable.mono's StandardMaterial3D.
+
+shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_disabled,diffuse_burley,specular_schlick_ggx,unshaded,shadows_disabled,ambient_light_disabled;
+uniform vec4 albedo : source_color;
+uniform sampler2D texture_albedo : source_color,filter_linear,repeat_disable;
+uniform float point_size : hint_range(0,128);
+uniform float roughness : hint_range(0,1);
+uniform sampler2D texture_metallic : hint_default_white,filter_linear,repeat_disable;
+uniform vec4 metallic_texture_channel;
+uniform sampler2D texture_roughness : hint_roughness_r,filter_linear,repeat_disable;
+uniform float specular;
+uniform float metallic;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
+uniform vec3 uv2_scale;
+uniform vec3 uv2_offset;
+
+
+void vertex() {
+	UV=UV*uv1_scale.xy+uv1_offset.xy;
+}
+
+
+
+
+
+
+void fragment() {
+	vec2 base_uv = SCREEN_UV;
+	vec4 albedo_tex = texture(texture_albedo,base_uv);
+	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float metallic_tex = dot(texture(texture_metallic,base_uv),metallic_texture_channel);
+	METALLIC = metallic_tex * metallic;
+	vec4 roughness_texture_channel = vec4(1.0,0.0,0.0,0.0);
+	float roughness_tex = dot(texture(texture_roughness,base_uv),roughness_texture_channel);
+	ROUGHNESS = roughness_tex * roughness;
+	SPECULAR = specular;
+}
+"
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_xwd0g"]
+viewport_path = NodePath("PortalView")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c60ch"]
+resource_local_to_scene = true
+render_priority = 0
+shader = SubResource("Shader_b217r")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/point_size = 1.0
+shader_parameter/roughness = 1.0
+shader_parameter/metallic_texture_channel = Plane(1, 0, 0, 0)
+shader_parameter/specular = 0.5
+shader_parameter/metallic = 0.0
+shader_parameter/uv1_scale = Vector3(1, 1, 1)
+shader_parameter/uv1_offset = Vector3(0, 0, 0)
+shader_parameter/uv2_scale = Vector3(1, 1, 1)
+shader_parameter/uv2_offset = Vector3(0, 0, 0)
+shader_parameter/texture_albedo = SubResource("ViewportTexture_xwd0g")
+
+[sub_resource type="BoxMesh" id="BoxMesh_xnvhj"]
+size = Vector3(2, 0, 2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_6v0pc"]
+size = Vector3(2, 2, 0.1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3gw7s"]
+resource_local_to_scene = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_sp0am"]
+resource_local_to_scene = true
+material = SubResource("StandardMaterial3D_3gw7s")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pxxw1"]
+
+[node name="Portal" type="Node3D" groups=["Portals"]]
+script = ExtResource("1_o53rk")
+
+[node name="PortalView" type="SubViewport" parent="."]
+handle_input_locally = false
+snap_2d_transforms_to_pixel = true
+snap_2d_vertices_to_pixel = true
+msaa_3d = 2
+screen_space_aa = 1
+canvas_item_default_texture_repeat = 1
+size = Vector2i(1152, 648)
+render_target_clear_mode = 2
+
+[node name="ViewPortCam" type="Camera3D" parent="PortalView"]
+keep_aspect = 0
+cull_mask = 1048573
+current = true
+fov = 120.0
+
+[node name="Screen" type="MeshInstance3D" parent="."]
+process_mode = 3
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+layers = 2
+material_override = SubResource("ShaderMaterial_c60ch")
+cast_shadow = 0
+ignore_occlusion_culling = true
+gi_mode = 0
+mesh = SubResource("BoxMesh_xnvhj")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("BoxShape3D_6v0pc")
+
+[node name="Border" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.05, 0, 0, 0, 1.98834, 0, 0, 0, 0.01, 1.01514, 0.0110282, 0)
+layers = 2
+cast_shadow = 0
+mesh = SubResource("BoxMesh_sp0am")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Border"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border/StaticBody3D"]
+shape = SubResource("BoxShape3D_pxxw1")
+
+[node name="Border3" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.05, 0, 0, 0, 2, 0, 0, 0, 0.01, -1.02298, 0.0110282, 0)
+layers = 2
+cast_shadow = 0
+mesh = SubResource("BoxMesh_sp0am")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Border3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border3/StaticBody3D"]
+shape = SubResource("BoxShape3D_pxxw1")
+
+[node name="Border2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.18557e-09, -1.98834, 0, 0.05, -8.69133e-08, 0, 0, 0, 0.01, 0, 1.03323, 0.005)
+layers = 2
+cast_shadow = 0
+mesh = SubResource("BoxMesh_sp0am")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Border2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Border2/StaticBody3D"]
+shape = SubResource("BoxShape3D_pxxw1")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
+[connection signal="body_exited" from="Area3D" to="." method="_on_area_3d_body_exited"]
